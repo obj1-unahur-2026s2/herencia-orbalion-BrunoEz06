@@ -1,0 +1,88 @@
+import orbalion.*
+
+describe "checkpoint 1"{
+    test "Un entrenador no puede tener un rol distinto a los autorizados por la FOZ" {
+        const entrenador = new Entrenadores(
+            cantidadDeCiclosSolares = 5,
+            estaEnSintonia = true,
+            nivelDePrecisionEstrategica = 80,
+            rol = "Estratega Cuántico"
+        )
+
+        assert.throwsException({ 
+            entrenador.cambiarRol("Director Técnico") 
+        })
+    }
+
+    test "Un equipo lumínico con radiación mayor a 5000 y sin tecnologías activas tiene como energía total su energía base" {
+        const entrenador = new Entrenadores(cantidadDeCiclosSolares = 10, estaEnSintonia = true, nivelDePrecisionEstrategica = 90, rol = "Estratega Cuántico")
+        const equipoLum = new Luminicos(
+            nombre = "Sol Invicta",
+            nivelDeEnergiaBase = 1000,
+            entrenador = entrenador,
+            radiacionCapturada = 6000
+        )
+
+        assert.equals(1000, equipoLum.energiaTotal())
+    }
+
+    test "Un equipo lumínico con radiación < 5000 → obtiene el bono del 10%."{
+        const entrenador = new Entrenadores (cantidadDeCiclosSolares = 30, estaEnSintonia = true, nivelDePrecisionEstrategica = 40, rol = "Guía Mental")
+        const equipoLum2 = new Luminicos(
+            nombre = "Gigan",
+            nivelDeEnergiaBase = 2000,
+            entrenador = entrenador,
+            radiacionCapturada = 4000
+        )
+        assert.equals(2200, equipoLum2.energiaTotal())
+    }
+
+    test "Estratega cuántico con 12 ciclos y precisión 90 "{
+        const entrenador = new Entrenadores (cantidadDeCiclosSolares = 12, estaEnSintonia = true, nivelDePrecisionEstrategica = 90, rol = "Estratega Cuantico" )
+        
+        assert.equals(true, entrenador.esDeEliteGalactica())
+    }
+
+    test "Arquitecto de energía con 11 ciclos pero sin sintonía"{
+        const entrenador3 = new Entrenadores (cantidadDeCiclosSolares = 11, estaEnSintonia = false, nivelDePrecisionEstrategica = 90, rol = "Arquitecto de Energía" )
+        
+        assert.equals(false, entrenador3.esDeEliteGalactica())
+    }
+        test "Guía mental con 15 ciclos"{
+        const entrenador4 = new Entrenadores (cantidadDeCiclosSolares = 15, estaEnSintonia = false, nivelDePrecisionEstrategica = 90, rol = "Guia Mental" )
+        
+        assert.equals(true, entrenador4.esDeEliteGalactica())
+    }
+
+    test "Equipo lumínico con 3 cristales, entrenador de élite y una tecnología activa"{
+        const entrenador5 = new Entrenadores (cantidadDeCiclosSolares = 110, estaEnSintonia = true, nivelDePrecisionEstrategica = 300, rol = "Guia Mental")
+        const equipoLum3 = new Luminicos(
+            nombre = "Porygon",
+            nivelDeEnergiaBase = 300,
+            entrenador = entrenador5,
+            radiacionCapturada = 5000,
+            cristalesSolares = ["A1" ,"A2", "A3"]
+        )
+
+        equipoLum3.añadirTecnologia(new TecnologiasEspeciales(nombre = "T1", valorEnergetico = 100, activa = true))
+
+        assert.that(equipoLum3.esDePrestigioUniversal())
+    }
+
+    test "Equipo sintético certificado con 4 módulos y todas las tecnologías activas "{
+        const entrenador = new Entrenadores(cantidadDeCiclosSolares = 5, estaEnSintonia = true, nivelDePrecisionEstrategica = 50, rol = "Guía Mental")
+        const equipoSin = new Sinteticos(
+            nombre = "Droide",
+            nivelDeEnergiaBase = 300,
+            entrenador = entrenador,
+            nivelDeProcesamientoCentral = 30,
+            cantidadModulosActivos = 4,
+            estaCertificado = true
+        )
+        equipoSin.añadirTecnologia(new TecnologiasEspeciales(nombre = "T1", valorEnergetico = 100, activa = true))
+
+        assert.that(equipoSin.esDePrestigioUniversal())
+    }
+}
+
+
